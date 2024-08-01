@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>수정페이지</title>
+</head>
+<body>
+<div class="container">
+    <div class="container p-5 my-5 bg-dark text-white text-center ">
+        <h2>수정 페이지</h2>
+    </div>
+    <div class="row" style="text-align: center;">
+        <form th:object="${book}" th:action class="form-check-inline" method="post">
+            <div class="input-group mb-3">
+                <span class="input-group-text" th:for="name" th:text="#{label.product.name}"></span>
+                <input type="text" th:field="*{name}" class="form-control" th:errorclass="text-bg-info" readonly>
+                <div th:errors="*{name}" class="text-bg-info"></div>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" th:for="creator" th:text="#{label.product.creator}"></span>
+                <input type="text" th:field="*{creator}" class="form-control" th:errorclass="text-bg-info" readonly>
+                <div th:errors="*{creator}" class="text-bg-info"></div>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" th:for="price" th:text="#{label.product.price}"></span>
+                <input type="text" th:field="*{price}" class="form-control" th:errorclass="text-bg-info">
+                <div th:errors="*{price}" class="text-bg-info"></div>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" th:for="quantity" th:text="#{label.product.quantity}"></span>
+                <input type="text" th:field="*{quantity}" class="form-control" th:errorclass="text-bg-info">
+                <div th:errors="*{quantity}" class="text-bg-info"></div>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" th:for="writer" th:text="#{label.product.writer}"></span>
+                <input type="text" th:field="*{writer}" class="form-control" th:errorclass="text-bg-info" readonly>
+                <div th:errors="*{writer}" class="text-bg-info"></div>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" th:for="isbn" th:text="#{label.product.isbn}"></span>
+                <input type="text" th:field="*{isbn}" class="form-control" th:errorclass="text-bg-info">
+                <div th:errors="*{isbn}" class="text-bg-info"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">수정</button>
+            <a class="btn btn-danger" th:onclick="|location.href='@{/product/book/{bookId}(bookId=${book.id})}'|">취소</a>
+        </form>
+    </div>
+</div>
+</body>
+</html>

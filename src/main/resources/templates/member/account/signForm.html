@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{/css/bootstrap.css}"rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+</head>
+<body>
+<div class="container">
+
+    <form th:object="${memberDto}" th:action method="post">
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="username"th:text="#{label.login.username}"></label>
+            <input type="text" th:field="*{username}" id="username" th:errorclass="text-warning" class="form-control">
+            <div class="text-warning" th:errors="*{username}"></div>
+        </div>
+
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="password" th:text="#{label.login.password}"></label>
+            <input type="text" th:field="*{password}" id="password" th:errorclass="text-warning" class="form-control">
+            <div class="text-warning" th:errors="*{password}"></div>
+        </div>
+
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="nickname"th:text="#{label.login.nickname}"></label>
+            <input type="text" th:field="*{nickname}" id="nickname" th:errorclass="text-warning" class="form-control">
+            <div class="text-warning" th:errors="*{nickname}"></div>
+        </div>
+
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="city"th:text="#{label.login.city}"></label>
+            <input type="text" th:field="*{city}" id="city" th:errorclass="text-warning" class="form-control">
+            <div class="text-warning" th:errors="*{city}"></div>
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="address"th:text="#{label.login.address}"></label>
+            <input type="text" th:field="*{address}" id="address" th:errorclass="text-warning" class="form-control">
+            <div class="text-warning" th:errors="*{address}"></div>
+        </div>
+
+        <div class="row">
+            <button class="btn btn-primary" type="submit">등록</button>
+            <button class="btn btn-danger" type="button" th:onclick="|location.href='@{/}'|">취소</button>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>

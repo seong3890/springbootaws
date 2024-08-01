@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+
+    <meta charset="UTF-8">
+    <title>상세페이지</title>
+</head>
+<body>
+<div class="container">
+    <div class="container p-5 my-5 bg-dark text-white text-center ">
+        <h2>상세 페이지</h2>
+    </div>
+    <div class="row" style="text-align: center;">
+        <form th:object="${book}" th:action class="form-check-inline">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>닉네임</th>
+                    <th>상품명</th>
+                    <th>저자</th>
+                    <th>가격</th>
+                    <th>수량</th>
+                    <th>판매자</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${book.id}"></td>
+                    <td th:text="${book.nickname}"></td>
+                    <td th:text="${book.name}"></td>
+                    <td th:text="${book.writer}"></td>
+                    <td th:text="${book.price}"></td>
+                    <td th:text="${book.quantity}"></td>
+                    <td th:text="${book.creator}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <th:block>
+                <button type="button" class="btn btn-primary" th:onclick="|location.href='@{/}'|">메인화면</button>
+            </th:block>
+            <th:block>
+                <button type="button" class="btn btn-primary"
+                        th:onclick="|location.href='@{/product/book/{bookId}/edit(bookId=${book.id})}'|">수정
+                </button>
+            </th:block>
+            <th:block><a role="button" class="btn btn-primary" th:href="'javascript:del('+${book.id}+')'">삭제</a>
+            </th:block>
+            <th:block>
+                <button th:onclick="|location.href='del('+${book.id}')'|">삭제2</button>
+            </th:block>
+            <button th:onclick="|location.href='javascript:del('+${book.id}+')'|" class="btn btn-primary">삭제3</button>
+        </form>
+
+    </div>
+</div>
+<div>
+
+    <script th:src="@{/js/jquery-3.6.3.min.js}"></script>
+    <script th:src="@{/js/bootstrap.js}"></script>
+</div>
+<!--<script th:src="@{/js/del.js}"></script>-->
+
+<script>
+    function del(id) {
+        $.ajax({
+            type: "DELETE",
+            url: "/product/book/" + id + "/delete",
+            dataType: "json",
+            contentType: "application/json; utf-8",
+        }).done(function () {
+            alert("글이 삭제되었습니다.");
+            window.location.href = "/product/book";
+        }).fail(function (e) {
+            alert(JSON.stringify(e));
+        })
+    }
+</script>
+
+</body>
+</html>

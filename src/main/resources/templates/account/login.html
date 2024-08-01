@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>로그인</title>
+</head>
+<body>
+<div class="container mt-3">
+
+    <form th:action th:object="${loginDto}" method="post">
+        <!--  글로벌 오류         -->
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p class="field-error" th:each="err:${#fields.globalErrors()}" th:text="${err}">전체오류메시지</p>
+        </div>
+        <div class="mb-3 mt-3">
+            <label for="username" th:text="#{label.login.username}"></label>
+            <input type="text" class="form-control" th:field="*{username}" id="username" th:errorclass="text-bg-danger">
+            <div th:errors="*{username}" class="text-bg-danger"></div>
+        </div>
+        <div class="mb-3">
+            <label for="password" th:text="#{label.login.password}"></label>
+            <input type="password" class="form-control" id="password" th:field="*{password}" th:errorclass="text-bg-danger">
+            <div class="text-bg-danger" th:errors="*{password}"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+</body>
+</html>
