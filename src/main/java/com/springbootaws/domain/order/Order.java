@@ -16,7 +16,7 @@ import static jakarta.persistence.FetchType.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table(name = "orders")
+@Table(name = "Orders")
 @Entity
 public class Order extends BaseTimeEntity {
     @Id
