@@ -21,7 +21,7 @@ public class Post extends BaseTimeEntity {
     private Long id;
 
     private String title;
-
+    @Column(name = "writer")
     private String write;
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
