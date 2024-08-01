@@ -62,3 +62,6 @@ clean {
 jar {
     enabled = false
 }
+bootJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
