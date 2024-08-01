@@ -20,7 +20,13 @@ import java.util.List;
 @Controller
 public class HomeController {
     private final BookService bookService;
-    @GetMapping
+
+    @GetMapping("test")
+    public String test() {
+        log.info("test");
+        return "/test";
+    }
+
     public String home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, Model model) {
         List<ProductDto> productDtos = bookService.BookTop10();
         log.info("product.memberName={}",productDtos.get(0).getNickname());
