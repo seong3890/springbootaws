@@ -1,7 +1,7 @@
 spring:
-  config:
-    activate:
-      on-profile: prod
+  profiles:
+    active: prod
+
   messages:
     basename: messages,errors
     encoding: UTF-8

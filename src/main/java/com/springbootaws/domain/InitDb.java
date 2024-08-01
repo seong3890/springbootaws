@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 public class InitDb {
 
     private final HelloDb helloDb;
-  //  @PostConstruct
+   // @PostConstruct
     public void postConstruct() {
         helloDb.init1();
         helloDb.init2();

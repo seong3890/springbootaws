@@ -27,6 +27,7 @@ public class HomeController {
         return "/test";
     }
 
+    @GetMapping
     public String home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member, Model model) {
         List<ProductDto> productDtos = bookService.BookTop10();
         log.info("product.memberName={}",productDtos.get(0).getNickname());
