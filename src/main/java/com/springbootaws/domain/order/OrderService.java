@@ -7,11 +7,14 @@ import com.springbootaws.domain.product.Product;
 import com.springbootaws.domain.product.ProductJpaRepository;
 import com.springbootaws.web.order.dto.OrderDto;
 import com.springbootaws.web.order.dto.OrderSearch;
+import com.springbootaws.web.product.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -23,11 +26,14 @@ public class OrderService {
     private final ProductJpaRepository productJpaRepository;
 
     public Page<OrderDto> findPageList(OrderSearch orderSearch, Pageable pageable) {
-        orderQueryRepository.findPageList(orderSearch, pageable);
-        return null;
+       return orderQueryRepository.findPageList(orderSearch, pageable);
+
     }
 
+    public List<ProductDto> findOrderDto() {
+        return productJpaRepository.findAll().stream().map(product -> new ProductDto(product.getId(),product.getName())).toList();
 
+    }
 
     @Transactional
     public Long order(Long memberId, Long productId, int count) {

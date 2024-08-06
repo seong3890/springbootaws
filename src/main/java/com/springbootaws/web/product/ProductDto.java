@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Data
+@AllArgsConstructor
 public class ProductDto {
     private Long id;
     private String nickname;
@@ -25,8 +26,9 @@ public class ProductDto {
     private String createTime;
     private String modifyTime;
 
-    public ProductDto(String nickname) {
-        this.nickname = nickname;
+    public ProductDto(Long id,String name) {
+        this.id = id;
+        this.name = name;
     }
 
     // 상품 전체 목록

@@ -22,14 +22,11 @@ public class MemberService {
 
     public List<MemberNicknameDto> findMemberDto() {
         List<Member> members = memberJpaRepository.findAll();
-        return members.stream().map(member -> new MemberNicknameDto(member.getNickname())).toList();
+        return members.stream().map(member -> new MemberNicknameDto(member.getId(),member.getNickname())).toList();
 
     }
 
-    public List<ProductDto> findOrderDto() {
-        return productJpaRepository.findAll().stream().map(product -> new ProductDto(product.getName())).toList();
 
-    }
 
     public Long signUp(MemberDto memberDto) {
         Member member = Member.builder()

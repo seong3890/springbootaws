@@ -22,6 +22,6 @@ public class OrderDto {
         this.nickname = nickname;
 
         this.orderStatus = orderStatus;
-        this.createTime = createTime.format((DateTimeFormatter.ofPattern("yy-mm-dd hh:ss")));
+        this.createTime = createTime.format((DateTimeFormatter.ofPattern("yy-MM-dd HH:mm")));
     }
 }

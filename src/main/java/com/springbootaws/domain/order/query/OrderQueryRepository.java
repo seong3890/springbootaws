@@ -47,9 +47,9 @@ public class OrderQueryRepository {
     public Page<OrderDto> findPageList(OrderSearch orderSearch, Pageable pageable) {
         // 다대일 관계 페이징 처리
         List<OrderDto> orderDtoList = factory.select(Projections.constructor(OrderDto.class,
-                        order.id, member.nickname, order.orderStatus, order.createDateTime))
+                        order.id, member.nickname, order.orderStatus, order.CreateDateTime))
                 .from(order)
-                .join(order.member, member).fetchJoin()
+                .join(order.member, member)
                 .where(nicknameEq(orderSearch.getNickname()),
                         orderStatusEq(orderSearch.getOrderStatus()))
                 .offset(pageable.getOffset())
@@ -82,7 +82,7 @@ public class OrderQueryRepository {
         List<OrderListDto> orderListDtos = factory.select(Projections.constructor(OrderListDto.class,
                         orderList.id, product.name, orderList.orderPrice, orderList.count))
                 .from(orderList)
-                .join(orderList.product, product).fetchJoin()
+                .join(orderList.product, product)
                 .where(orderList.order.id.in(orderId))
                 .fetch();
         // Map으로 만들어서 자바 메모리에 올리기
@@ -97,7 +97,7 @@ public class OrderQueryRepository {
     }
 
     private BooleanExpression orderStatusEq(OrderStatus orderStatus) {
-        return hasText(String.valueOf(orderStatus)) ? order.orderStatus.eq(orderStatus) : null;
+        return orderStatus!=null ? order.orderStatus.eq(orderStatus) : null;
     }
 
     private BooleanExpression nicknameEq(String nickname) {

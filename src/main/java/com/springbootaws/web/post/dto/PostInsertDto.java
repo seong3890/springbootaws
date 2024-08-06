@@ -1,12 +1,10 @@
 package com.springbootaws.web.post.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class PostSearch {
-    private String nickname;
+public class PostInsertDto {
     private String title;
-
+    private String write;
 
 }

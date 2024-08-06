@@ -2,6 +2,7 @@ package com.springbootaws.web.order;
 
 import com.springbootaws.domain.member.MemberService;
 import com.springbootaws.domain.order.OrderService;
+
 import com.springbootaws.web.member.dto.MemberNicknameDto;
 import com.springbootaws.web.order.dto.OrderDto;
 import com.springbootaws.web.order.dto.OrderSearch;
@@ -13,10 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,17 +38,17 @@ public class OrderController {
     @GetMapping("/order")
     public String orderGet(Model model) {
         List<MemberNicknameDto> memberDto = memberService.findMemberDto();
-        List<ProductDto> productDtos = memberService.findOrderDto();
+        List<ProductDto> productDtos = orderService.findOrderDto();
 
 
-        model.addAttribute("member", memberDto);
-        model.addAttribute("product", productDtos);
+        model.addAttribute("members", memberDto);
+        model.addAttribute("products", productDtos);
 
         return "order/orderForm";
     }
 
     @PostMapping("/order")
-    public String orderPost(Long memberId, Long productId, int count) {
+    public String orderPost(@RequestParam("memberId") Long memberId,@RequestParam("productId") Long productId,@RequestParam("count") int count) {
         Long order = orderService.order(memberId, productId, count);
         return "redirect:/orders";
     }

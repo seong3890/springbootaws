@@ -24,11 +24,11 @@ public class Post extends BaseTimeEntity {
     @Column(name = "writer")
     private String write;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "inquiry_id")
     private Inquiry inquiry;
 

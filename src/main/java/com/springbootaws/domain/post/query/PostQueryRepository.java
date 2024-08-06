@@ -8,6 +8,7 @@ import com.springbootaws.domain.member.QMember;
 import com.springbootaws.domain.post.QInquiry;
 import com.springbootaws.domain.post.QPost;
 import com.springbootaws.web.post.dto.PostDto;
+import com.springbootaws.web.post.dto.PostListDto;
 import com.springbootaws.web.post.dto.PostSearch;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.springbootaws.domain.member.QMember.member;
+import static com.springbootaws.domain.post.QInquiry.inquiry1;
 import static com.springbootaws.domain.post.QPost.post;
 import static org.springframework.util.StringUtils.*;
 
@@ -37,18 +39,22 @@ public class PostQueryRepository {
     }
 
 
-    public Page<PostDto> PostSearchPage(PostSearch search, Pageable pageable) {
-        List<PostDto> fetch = factory.select(Projections.constructor(PostDto.class,
-                        post.title, post.write, member.nickname, QInquiry.inquiry1.inquiry,
-                        post.createDateTime, post.modifyDate, post.id))
+    public Page<PostListDto> PostSearchPage(PostSearch search, Pageable pageable) {
+        List<PostListDto> fetch = factory.select(Projections.constructor(PostListDto.class,
+                        post.id, member.nickname, inquiry1.inquiry, post.title,
+                        post.CreateDateTime ))
                 .from(post)
                 .join(post.member, member)
+                .join(post.inquiry,inquiry1)
                 .where(nicknameEq(search.getNickname()),
                         titleEq(search.getTitle()))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         int size = factory.selectFrom(post)
                 .join(post.member, member).fetchJoin()
+                .join(post.inquiry,inquiry1).fetchJoin()
                 .where(nicknameEq(search.getNickname()),
                         titleEq(search.getTitle()))
                 .fetch().size();

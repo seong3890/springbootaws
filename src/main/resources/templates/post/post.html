@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>글 상세 페이지</title>
+</head>
+<body>
+<div class="container">
+    <div class="container p-5 my-5 bg-dark text-white text-center">
+        <h2>글 상세 페이지</h2>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <h3 th:text="${post.title}" class="card-title"></h3>
+        </div>
+        <div class="card-body">
+            <p class="card-text" th:text="${post.write}"></p>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>작성자:</strong> <span th:text="${post.nickname}"></span></p>
+                    <p><strong>문의종류:</strong> <span th:text="${post.inquiry}"></span></p>
+                </div>
+                <div class="col-md-6 text-right">
+                    <p><strong>작성일:</strong> <span th:text="${post.createTime}"></span></p>
+                    <p><strong>수정일:</strong> <span th:text="${post.modifyTime}"></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a th:href="@{|/post/${post.id}/edit|}" class="btn btn-primary">수정</a>
+            <a role="button" th:href="'javascript:del('+${post.id}+')'" class="btn btn-danger">삭제</a>
+            <!--            <a th:href="@{|/post/${post.id}/delete|}" class="btn btn-danger" onclick="return confirm('정말로 삭제하시겠습니까?')">삭제</a>-->
+            <a th:href="@{/post}" class="btn btn-secondary">목록으로</a>
+        </div>
+    </div>
+
+</div>
+<script th:src="@{/js/jquery-3.6.3.min.js}"></script>
+<script th:src="@{/js/bootstrap.js}"></script>
+
+<script>
+    function del(id) {
+        $.ajax({
+            type: "DELETE",
+            url: "/post/" + id + "/delete",
+            dataType: "json",
+            contentType: "application/json; utf-8",
+        }).done(function (){
+            alert("글이 삭제되었습니다.")
+            window.location.href="/post";
+        }).fail(function (e){
+            alert(JSON.stringify(e))
+        })
+    }
+</script>
+</body>
+</html>

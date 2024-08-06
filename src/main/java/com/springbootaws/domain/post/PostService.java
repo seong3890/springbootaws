@@ -3,9 +3,7 @@ package com.springbootaws.domain.post;
 import com.springbootaws.domain.member.Member;
 import com.springbootaws.domain.member.MemberJpaRepository;
 import com.springbootaws.domain.post.query.PostQueryRepository;
-import com.springbootaws.web.post.dto.PostDto;
-import com.springbootaws.web.post.dto.PostSearch;
-import com.springbootaws.web.post.dto.UpdatePostDto;
+import com.springbootaws.web.post.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,7 +25,7 @@ public class PostService {
     private final MemberJpaRepository memberJpaRepository;
 
 
-    public Page<PostDto> findPostListSearchPage(PostSearch search, Pageable pageable) {
+    public Page<PostListDto> findPostListSearchPage(PostSearch search, Pageable pageable) {
         return postQueryRepository.PostSearchPage(search, pageable);
     }
 
@@ -47,26 +45,38 @@ public class PostService {
     @Transactional
     public Long update(Long id, UpdatePostDto postDto, Long inquiryId) {
         Inquiry inquiry = inquiryJpaRepository.findById(inquiryId).get();
-        Post post = postJpaRepository.findById(postDto.getId()).orElseThrow(() -> new IllegalStateException("해당 글이 존재하지 않습니다."));
+        log.info("id={}, post.id={}",id,postDto.getId());
+        Post post = postJpaRepository.findById(id).orElseThrow(() -> new IllegalStateException("해당 글이 존재하지 않습니다."));
         post.updatePost(postDto.getTitle(), postDto.getWrite(), inquiry);
         return post.getId();
     }
 
+    @Transactional
     public void delete(Long id) {
         Post post = postJpaRepository.findById(id).orElseThrow(() -> new RuntimeException("해당 회원이 존재하지 않습니다."));
         postJpaRepository.delete(post);
+        log.info("삭제 성공!! id={}",id);
 
     }
 
-    public void create(PostDto postDto, Long inquiryId, Long memberId) {
+    @Transactional
+    public void create(PostInsertDto postInsertDto, Long inquiryId, Long memberId) {
         Inquiry inquiry = inquiryJpaRepository.findById(inquiryId).get();
         Member member = memberJpaRepository.findById(memberId).get();
         Post post = Post.builder()
                 .member(member)
-                .title(postDto.getTitle())
-                .write(postDto.getWrite())
+                .title(postInsertDto.getTitle())
+                .write(postInsertDto.getWrite())
                 .inquiry(inquiry)
                 .build();
+        postJpaRepository.save(post);
 
+    }
+
+    public UpdatePostDto finUpdatedPost(Long id) {
+        Post post = postJpaRepository.findPost(id);
+
+        return new UpdatePostDto(post.getId(),post.getTitle(),post.getMember().getNickname(), post.getWrite(),
+                post.getInquiry().getInquiry(),post.getInquiry().getId());
     }
 }

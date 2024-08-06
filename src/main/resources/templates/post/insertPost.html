@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>고객문의</title>
+</head>
+<body>
+<div class="container">
+
+    <div class="container p-5 my-5 bg-dark text-white text-center ">
+        <h2>고객문의</h2>
+    </div>
+    <div>
+        <form th:action  th:object="${post}" method="post">
+            <input type="hidden" th:value="${memberId}" name="memberId" id="memberId">
+            <input type="text" th:value="${nickname}" readonly >
+            <div class="col">
+                <input type="text" th:field="*{title}" placeholder="제목을 입력하세요" class="form-control">
+            </div>
+            <select name="inquiryId" id="inquiry" class="form-select form-select-lg">
+                <option value="">문의종류</option>
+                <option th:each="inquiry : ${inquirys}" th:value="${inquiry.id}" th:text="${inquiry.inquiry}"></option>
+            </select>
+            <div>
+                <textarea class="form-control" rows="5" th:field="*{write}"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">등록</button>
+            <button  class="btn btn-secondary">취소</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

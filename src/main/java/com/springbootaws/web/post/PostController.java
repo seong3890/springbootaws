@@ -1,12 +1,9 @@
 package com.springbootaws.web.post;
 
-import com.springbootaws.SessionConst;
 import com.springbootaws.domain.member.Member;
+import com.springbootaws.domain.member.MemberService;
 import com.springbootaws.domain.post.*;
-import com.springbootaws.web.post.dto.PostDto;
-import com.springbootaws.web.post.dto.PostSearch;
-import com.springbootaws.web.post.dto.UpdatePostDto;
-import lombok.Getter;
+import com.springbootaws.web.post.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -17,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -28,26 +26,27 @@ import static com.springbootaws.SessionConst.LOGIN_MEMBER;
 @Controller
 public class PostController {
     private final PostService postService;
+    private final MemberService memberService;
 
     @GetMapping
     public String boardListSearchPage(@PageableDefault(size = 5, page = 0) Pageable pageable,
                                       @ModelAttribute("search") PostSearch search, Model model) {
 
-        Page<PostDto> postListSearchPage = postService.findPostListSearchPage(search, pageable);
-        model.addAttribute("post", postListSearchPage);
-        return "post/list";
+        Page<PostListDto> postListSearchPage = postService.findPostListSearchPage(search, pageable);
+        model.addAttribute("posts", postListSearchPage);
+        return "post/postList";
     }
 
     @GetMapping("/{postId}")
     public String postGet(@PathVariable("postId") Long postId, Model model) {
         PostDto postDto = postService.findPost(postId);
         model.addAttribute("post", postDto);
-        return "/post";
+        return "post/post";
     }
 
     @GetMapping("/{postId}/edit")
     public String updateForm(@PathVariable("postId") Long id, Model model) {
-        PostDto postDto = postService.findPost(id);
+        UpdatePostDto postDto = postService.finUpdatedPost(id);
         List<Inquiry> inquiryList = postService.findInquiry();
         model.addAttribute("post", postDto);
         model.addAttribute("inquiry", inquiryList);
@@ -55,42 +54,46 @@ public class PostController {
     }
 
     @PostMapping("/{postId}/edit")
-    public String updatePost(@PathVariable("postId") Long id, @Validated UpdatePostDto postDto,
-                             BindingResult bindingResult, @RequestParam("inquiry") Long inquiry_id) {
+    public String updatePost(@PathVariable("postId") Long id, @Validated @ModelAttribute("post") UpdatePostDto postDto,
+                             BindingResult bindingResult, @RequestParam("inquiryId") Long inquiry_id) {
         if (bindingResult.hasErrors()) {
             return "post/edit";
         }
         Long PostsId = postService.update(id, postDto, inquiry_id);
-        return "redirect:/board/" + PostsId;
+        return "redirect:/post/" + PostsId;
     }
 
-    @GetMapping("/insetPost")
-    public String insertPostForm(@SessionAttribute(name = LOGIN_MEMBER) Member member, @ModelAttribute("post") PostDto postDto, Model model) {
-        List<Inquiry> inquiry = postService.findInquiry();
-        model.addAttribute("inquiry", inquiry);
+    @GetMapping("/insertPost")
+    public String insertPostForm(@SessionAttribute(name = LOGIN_MEMBER) Member member,
+                                 @ModelAttribute("post") PostInsertDto postInsertDto, Model model) {
+        List<Inquiry> inquirys = postService.findInquiry();
+        model.addAttribute("inquirys", inquirys);
         model.addAttribute("nickname", member.getNickname());
         model.addAttribute("memberId", member.getId());
         return "post/insertPost";
     }
 
-    @PostMapping("/insetPost")
-    public String insertPost(@Validated PostDto postDto, BindingResult result,
+    @PostMapping("/insertPost")
+    public String insertPost(@Validated PostInsertDto postInsertDto, BindingResult result,
                              @RequestParam("inquiryId") Long inquiry_id,
-                             @RequestParam("memberId") Long memberId, Model model) {
+                             @RequestParam("memberId") Long memberId) {
         if (inquiry_id == null) {
             result.rejectValue("id", "range", "문의유형을 선택하세요");
         }
         if (result.hasErrors()) {
-            return "board/insertBoard";
+            return "post/insertPost";
         }
-        postService.create(postDto, inquiry_id, memberId);
-        return "redirect:/board";
+        postService.create(postInsertDto, inquiry_id, memberId);
+        return "redirect:/post";
     }
 
-    @DeleteMapping("/{boardId}/delete")
     @ResponseBody
-    public Long deleteBoard(@PathVariable("boardId") Long id) {
-        postService.delete(id);
+    @DeleteMapping("/{postId}/delete")
+    public Long deleteBoard(@PathVariable("postId") Long id) {
+
+            postService.delete(id);
+            log.info("id={} 삭제 성공", id);
+
         return id;
     }
 
