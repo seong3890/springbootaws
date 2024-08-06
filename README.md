@@ -92,6 +92,7 @@ aws 배포, 시큐리티 적용 등 아직 할 게 산더미이다.</br>
 <h1>사진</h1>
 <details>
 <summary>사진</summary>
+	
 ![git1](https://github.com/user-attachments/assets/5aaeddf3-67a8-49b2-a47d-f5967303c0e4)<br/>
 ![git2](https://github.com/user-attachments/assets/65ee753d-86ac-4f36-a455-3bbf3501c691)<br/>
 
